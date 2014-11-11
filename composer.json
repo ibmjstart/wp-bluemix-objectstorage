@@ -1,0 +1,14 @@
+{
+    "name": "ibmjstart/wp-bluemix-objectstorage",
+    "description": "WordPress plugin to use IBM Object Storage for media",
+    "type": "library",
+    "keywords": [
+        "objectstorage",
+        "softlayer",
+        "bluemix",
+        "object",
+        "storage"
+    ],
+    "homepage": "https://github.com/ibmjstart/",
+    "license": "GPLv3"
+}
