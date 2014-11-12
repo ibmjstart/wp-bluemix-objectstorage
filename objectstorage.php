@@ -44,3 +44,11 @@ function swift_init( ) {
     }}
 
 add_action( 'init', 'swift_init' );
+
+function hide_objectstorage_deactivate($hook){
+  if($hook == 'plugins.php'){
+    wp_enqueue_script( 'hide-deactivation', plugins_url('hide-deactivation.js', __FILE__), 'jquery');
+  }
+}
+
+add_action('admin_enqueue_scripts', 'hide_objectstorage_deactivate');
