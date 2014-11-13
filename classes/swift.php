@@ -205,7 +205,7 @@ class Swift extends Swift_Plugin_Base {
 				if ( isset( $data['thumb'] ) && $data['thumb'] ) {
 			$path = str_replace( $file_name, $data['thumb'], $file_path );
 					$additional_images[] = array(
-				'Key'        => $prefix . $data['thumb'],
+				'Key'        => $prefix . $this->uploadHash . '/' . $data['thumb'],
 				'SourceFile' => $path
 					);
 					$files_to_remove[] = $path;
@@ -214,7 +214,7 @@ class Swift extends Swift_Plugin_Base {
 					foreach ( $data['sizes'] as $size ) {
 				$path = str_replace( $file_name, $size['file'], $file_path );
 						$additional_images[] = array(
-					'Key'        => $prefix . $size['file'],
+					'Key'        => $prefix . $this->uploadHash . '/' . $size['file'],
 					'SourceFile' => $path
 						);
 						$files_to_remove[] = $path;
