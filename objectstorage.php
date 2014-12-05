@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: IBM Object Storage
-Description: Automatically copies media uploads to IBM Object Storage for remote storage. This plugin is designed to NOT be disabled. Disabling it could make you lose all of your data.
-As such, selecting deactivate will not deactivate the plugin; if you would like to do so please remove it from your application and repush.
+Description: Automatically copies media uploads to IBM Object Storage
 Author: Austin Hamilton
 Author URI: http://www-01.ibm.com/software/ebusiness/jstart/
+Plugin URI: https://github.com/ibmjstart/wp-bluemix-objectstorage
 Version: 0.2
 Network: True
 License: GPLv3
@@ -20,8 +20,8 @@ License: GPLv3
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // **********************************************************************
 //
-// Forked from an Amazon S3 plugin (http://wordpress.org/extend/plugins/amazon-s3-and-cloudfront/)
-// by Brad Touesnard and written to use Softlayer/OpenStack Swift object storage instead of S3.
+// Forked from the Amazon S3 plugin (http://wordpress.org/extend/plugins/amazon-s3-and-cloudfront/)
+// and modified to use the Object Storage service on IBM Bluemix
 */
 
 function swift_init( ) {
