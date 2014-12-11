@@ -2,8 +2,8 @@
 /*
 Plugin Name: IBM Object Storage
 Description: Automatically copies media uploads to IBM Object Storage
-Author: Austin Hamilton
-Author URI: http://www-01.ibm.com/software/ebusiness/jstart/
+Author: IBM
+Author URI: http://www.ibm.com/us/en/
 Plugin URI: https://github.com/ibmjstart/wp-bluemix-objectstorage
 Version: 0.2
 Network: True
