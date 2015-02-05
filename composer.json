@@ -24,7 +24,7 @@
     "license": "GPLv3",
     "require": {
         "composer/installers"               : "~1.0",
-        "ibmjstart/zendservice-openstack"   : "dev-master"
+        "ibmjstart/zendservice-openstack"   : "dev-miguel"
     }
 }
 
