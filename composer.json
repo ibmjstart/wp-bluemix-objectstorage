@@ -9,9 +9,22 @@
         "object",
         "storage"
     ],
+    "repositories": [
+        {
+          "type": "composer",
+          "url": "https://packages.zendframework.com/"
+        },
+        {
+          "type": "vcs",
+          "url": "git@github.com:ibmjstart/ZendService_IBMObjectStorage.git"
+        }
+    ],
+
     "homepage": "https://github.com/ibmjstart/",
     "license": "GPLv3",
     "require": {
-        "composer/installers": "~1.0"
+        "composer/installers"               : "~1.0",
+        "ibmjstart/zendservice-openstack"   : "dev-master"
     }
 }
+
