@@ -22,8 +22,8 @@
 
     "homepage": "https://github.com/ibmjstart/",
     "license": "GPLv3",
-    "require": {
-        "composer/installers"               : "~1.0",
+    "require": { 
+       "johnpbloch/wordpress"               : ">=4.1",
         "ibmjstart/zendservice-openstack"   : "dev-miguel"
     }
 }
