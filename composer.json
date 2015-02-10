@@ -24,7 +24,7 @@
     "license": "GPLv3",
     "require": { 
        "johnpbloch/wordpress"               : ">=4.1",
-        "ibmjstart/zendservice-openstack"   : "dev-miguel"
+        "ibmjstart/zendservice-openstack"   : "dev-master"
     }
 }
 
