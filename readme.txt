@@ -36,6 +36,9 @@ result in losing all of the files you currently have saved that aren't uploaded 
 
 == Changelog ==
 
+= 0.3 - 2015-2-11 =
+* added wordpress dependency to ensure wordpress installed before objectstorage
+
 = 0.2 - 2014-11-04 =
 * Added a default container to upload images to. Object Storage will now automatically upload media files to "WordPress" until changed to a new container.
 * Renamed plugin and folder structure
