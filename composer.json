@@ -23,7 +23,6 @@
     "homepage": "https://github.com/ibmjstart/",
     "license": "GPLv3",
     "require": { 
-       "johnpbloch/wordpress"               : "*",
         "ibmjstart/zendservice-openstack"   : "dev-master"
     }
 }
