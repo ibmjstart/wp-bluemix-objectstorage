@@ -16,14 +16,14 @@
         },
         {
           "type": "vcs",
-          "url": "git@github.com:zendframework/ZendService_OpenStack.git"
+          "url": "git@github.com:ibmjstart/ZendService_IBMObjectStorage.git"
         }
     ],
 
     "homepage": "https://github.com/ibmjstart/",
     "license": "GPLv3",
     "require": { 
-        "zendframework/zendservice-openstack"   : "dev-master"
+        "ibmjstart/zendservice-openstack"   : "dev-dev"
     }
 }
 
