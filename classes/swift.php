@@ -445,7 +445,7 @@ class Swift extends Swift_Plugin_Base {
 						'key'      => $password
 				);
 
-			$http = new Zend\Http\Client(null, array());
+			$http = new Zend\Http\Client(null, array(
 																				'adapter' => 'Zend\Http\Client\Adapter\Socket',
 																				'sslverifypeer' => false));
 			$this->swiftClient = new ZendService\OpenStack\ObjectStorage($options, $http);
