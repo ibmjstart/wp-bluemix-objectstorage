@@ -436,13 +436,15 @@ class Swift extends Swift_Plugin_Base {
 		$auth_uri = $creds['auth_url'] . '/v3/auth/tokens/WordPress';	//Create an object storage subaccount for WordPress.
 		$user = $creds['userId'];
 		$password = $creds['password'];
+		$projectId = $creds['projectId'];
 
 		if(is_null($this->swiftClient)){
 
 			$options = array (
-						'url'      => $auth_uri,
-						'user'     => $user,
-						'key'      => $password
+						'url'       => $auth_uri,
+						'user'      => $user,
+						'key'       => $password
+						'projectId' => $projectId
 				);
 
 			$http = new Zend\Http\Client(null, array('adapter' => 'Zend\Http\Client\Adapter\Socket',
