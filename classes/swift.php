@@ -434,7 +434,7 @@ class Swift extends Swift_Plugin_Base {
 		$swift = $this->swift_get_vcap_variable('Object-Storage');
 		$creds = $swift['credentials'];
 		$auth_url = $creds['auth_url'];
-		$region = $creds['region']
+		$region = $creds['region'];
 		$userId = $creds['userId'];
 		$password = $creds['password'];
 		$projectId = $creds['projectId'];
