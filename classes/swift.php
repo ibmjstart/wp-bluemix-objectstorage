@@ -433,25 +433,29 @@ class Swift extends Swift_Plugin_Base {
 
 		$swift = $this->swift_get_vcap_variable('Object-Storage');
 		$creds = $swift['credentials'];
-		$auth_uri = $creds['auth_url'] . '/v3/auth/tokens/WordPress';	//Create an object storage subaccount for WordPress.
-		$user = $creds['userId'];
+		$auth_url = $creds['auth_url'];
+		$region = $creds['region']
+		$userId = $creds['userId'];
 		$password = $creds['password'];
 		$projectId = $creds['projectId'];
 
 		if(is_null($this->swiftClient)){
-
-			$options = array (
-						'url'       => $auth_uri,
-						'user'      => $user,
-						'key'       => $password
-						'projectId' => $projectId
-				);
-
-			$http = new Zend\Http\Client(null, array('adapter' => 'Zend\Http\Client\Adapter\Socket',
-								 'sslverifypeer' => false));
-			$this->swiftClient = new ZendService\OpenStack\ObjectStorage($options, $http);
+			$this->swiftClient = new OpenStack\OpenStack([
+						    'authUrl' => $auth_url,
+						    'region'  => $region,
+						    'user'    => [
+						        'id'       => $userId,
+						        'password' => $password
+						    ],
+						    'scope'   => [
+						    	'project' => [
+						    		'id' => $projectId
+						    	]
+						    ]
+						]);
 		}
-		return $this->swiftClient;
+		
+		return $this->swiftClient->objectStoreV1();
 	}
 
 	function swift_get_containers() {
