@@ -10,10 +10,7 @@
         "storage"
     ],
     "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/php-opencloud/openstack"
-        }
+       
     ],
 
     "homepage": "https://github.com/ibmjstart/",
