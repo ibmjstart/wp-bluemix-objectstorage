@@ -378,7 +378,7 @@ class Swift extends Swift_Plugin_Base {
 		// Hash cannot be added at the end of the url due to file extension, so put it at the
 		// beginning of the object name.
 
-		$url = $this->getObjectUrl($swiftObject['bucket'], $swiftObject['key'])
+		$url = $this->getObjectUrl($swiftObject['bucket'], $swiftObject['key']);
 
 		if ( !is_null( $expires ) ) {
 			try {
