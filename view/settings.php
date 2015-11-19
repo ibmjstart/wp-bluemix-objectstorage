@@ -37,7 +37,7 @@ if ( isset( $_GET['updated'] ) ) {
 		<select name="bucket" class="bucket">
 		<option value="">-- <?php _e( 'Select a Swift Container', 'swift' ); ?> --</option>
 		<?php if ( is_array( $buckets ) ) foreach ( $buckets->listContainers() as $bucket ): ?>
-				<option value="<?php echo esc_attr( $bucket->name ); ?>" <?php echo $bucket->name == $this->swift_get_setting( 'bucket' ) ? 'selected="selected"' : ''; ?>><?php echo esc_html( $bucket->name ); ?></option>
+				<option value="<?= esc_attr( $bucket->name ); ?>" <?= $bucket->name == $this->swift_get_setting( 'bucket' ) ? 'selected="selected"' : ''; ?>><?= esc_html( $bucket->name ); ?></option>
 		<?php endforeach;?>
 		<option value="new"><?php _e( 'Create a new container...', 'swift' ); ?></option>
 		</select><br />
