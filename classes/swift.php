@@ -378,12 +378,12 @@ class Swift extends Swift_Plugin_Base {
 		// Hash cannot be added at the end of the url due to file extension, so put it at the
 		// beginning of the object name.
 
-		$url = $this->swift_get_client()->getStorageUrl() . '/' . $domain_bucket . '/' . $swiftObject['key'];
+		$url = $this->getObjectUrl($swiftObject['bucket'], $swiftObject['key'])
 
 		if ( !is_null( $expires ) ) {
 			try {
 				$expires = time() + $expires;
-					$secure_url = $this->swift_get_client()->getObjectUrl($swiftObject['bucket'], $swiftObject['key'] );
+					$secure_url = $this->getObjectUrl($swiftObject['bucket'], $swiftObject['key'] );
 					$url .= substr( $secure_url, strpos( $secure_url, '?' ) );
 			}
 			catch ( Exception $e ) {
@@ -392,6 +392,11 @@ class Swift extends Swift_Plugin_Base {
 		}
 
 		return apply_filters( 'swift_get_attachment_url', $url, $swiftObject, $post_id, $expires );
+	}
+	
+	function getObjectUrl($myBucket, $myKey) {
+		$url = 'https://identity.open.softlayer.com/v3' . '/' . $myBucket . '/' . $myKey;
+		return $url;
 	}
 
 	function swift_verify_ajax_request() {
