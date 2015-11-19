@@ -185,7 +185,12 @@ class Swift extends Swift_Plugin_Base {
 						try {
 								$uploaded = file_get_contents($args['SourceFile'] );
 								$newKey = $args['Key'];
-								$this->swift_get_client()->setObject($args['Bucket'], $newKey, $uploaded);
+								$this->swift_get_client()
+								     ->getContainer($args['Bucket'])
+								     ->createObject([
+								     		'name'    => $newKey,
+    										'content' => $uploaded
+								     		]);
 						}
 						catch ( Exception $e ) {
 								error_log( 'Error uploading ' . $file_path . ' to Swift: ' . $e->getMessage() );
@@ -246,7 +251,12 @@ class Swift extends Swift_Plugin_Base {
 
 				$uploaded = file_get_contents($args['SourceFile'] );
 				$newKey = $args['Key'];
-		  	$this->swift_get_client()->setObject($args['Bucket'], $newKey, $uploaded );
+		  		$this->swift_get_client()
+				     ->getContainer($args['Bucket'])
+				     ->createObject([
+				     		'name'    => $newKey,
+    						'content' => $uploaded
+				     		]);
 
 			}
 			catch ( Exception $e ) {
