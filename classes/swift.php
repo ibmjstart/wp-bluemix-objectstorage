@@ -59,73 +59,79 @@ class Swift extends Swift_Plugin_Base {
 		}
 
 		function swift_delete_attachment( $post_id ) {
-				if ( !$this->swift_plugin_setup() ) {
-						return;
-				}
+			if ( !$this->swift_plugin_setup() ) {
+					return;
+			}
 
-				$backup_sizes = get_post_meta( $post_id, '_wp_attachment_backup_sizes', true );
+			$backup_sizes = get_post_meta( $post_id, '_wp_attachment_backup_sizes', true );
 
-				$intermediate_sizes = array();
-				foreach ( get_intermediate_image_sizes() as $size ) {
-						if ( $intermediate = image_get_intermediate_size( $post_id, $size ) )
-								$intermediate_sizes[] = $intermediate;
-				}
+			$intermediate_sizes = array();
+			foreach ( get_intermediate_image_sizes() as $size ) {
+					if ( $intermediate = image_get_intermediate_size( $post_id, $size ) )
+							$intermediate_sizes[] = $intermediate;
+			}
 
-				if ( !( $swiftObject = $this->swift_get_attachment_info( $post_id ) ) ) {
-						return;
-				}
+			if ( !( $swiftObject = $this->swift_get_attachment_info( $post_id ) ) ) {
+					return;
+			}
 
-				$swift_path = dirname( $swiftObject['key'] );
-				$objects = array();
+			$swift_path = dirname( $swiftObject['key'] );
+			$objects = array();
 
-				// remove intermediate and backup images if there are any
-				foreach ( $intermediate_sizes as $intermediate ) {
+			// remove intermediate and backup images if there are any
+			foreach ( $intermediate_sizes as $intermediate ) {
+					$objects[] = array(
+						'Key' => path_join( $swift_path, $intermediate['file'] )
+					);
+			}
+
+			if ( is_array( $backup_sizes ) ) {
+					foreach ( $backup_sizes as $size ) {
 						$objects[] = array(
-							'Key' => path_join( $swift_path, $intermediate['file'] )
-						);
-				}
-
-				if ( is_array( $backup_sizes ) ) {
-						foreach ( $backup_sizes as $size ) {
-							$objects[] = array(
-								'Key' => $swift_path
-							);
-						}
-				}
-
-				// Try removing any @2x images but ignore any errors
-				if ( $objects ) {
-					$hidpi_images = array();
-					foreach ( $objects as $object ) {
-						$hidpi_images[] = array(
-							'Key' => $this->swift_get_hidpi_file_path( $object['Key'] )
+							'Key' => $swift_path
 						);
 					}
+			}
+
+			// Try removing any @2x images but ignore any errors
+			if ( $objects ) {
+				$hidpi_images = array();
+				foreach ( $objects as $object ) {
+					$hidpi_images[] = array(
+						'Key' => $this->swift_get_hidpi_file_path( $object['Key'] )
+					);
+				}
+
+				try {
+					foreach($hidpi_images as $image) {
+						$this->swift_get_client()
+						     ->getContainer($swiftObject['bucket'])
+					             ->getObject($image['Key'])
+					             ->delete();
+					}
+				}
+				catch ( Exception $e ) {}
+			}
+
+			$objects[] = array(
+				'Key' => $swiftObject['key']
+			);
 
 			try {
-						foreach($hidpi_images as $image) {
-								$this->swift_get_client()->deleteObject($swiftObject['bucket'], $image['Key']);
-						}
-			}
-			catch ( Exception $e ) {}
+				foreach ($objects as $object){
+					$this->swift_get_client()
+					     ->getContainer($swiftObject['bucket'])
+				             ->getObject($object['Key'])
+				             ->delete();
 				}
-
-				$objects[] = array(
-					'Key' => $swiftObject['key']
-				);
-
-		try {
-					foreach ($objects as $object){
-						$this->swift_get_client()->deleteObject($swiftObject['bucket'], $object['Key'] );
-					}
-		}
-		catch ( Exception $e ) {
-			error_log( 'Error removing files from Swift: ' . $e->getMessage() );
-			return;
-		}
-
-				delete_post_meta( $post_id, 'swift_info' );
-		}
+			}
+			catch ( Exception $e ) {
+				error_log( 'Error removing files from Swift: ' . $e->getMessage() );
+				return;
+			}
+	
+					delete_post_meta( $post_id, 'swift_info' );
+			}
 
 		/*
 		* 	When WordPress uploads a file on the local filesystem with the same name as something that has already been uploaded,
