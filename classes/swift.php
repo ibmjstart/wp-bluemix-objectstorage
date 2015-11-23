@@ -401,7 +401,7 @@ class Swift extends Swift_Plugin_Base {
 	}
 	
 	function getObjectUrl($myBucket, $myKey) {
-		$url = 'https://identity.open.softlayer.com/v3' . '/' . $myBucket . '/' . $myKey;
+		$url = 'https://dal.objectstorage.open.softlayer.com/v1/AUTH_b5983bc6cb054ded99e4cef57318c05f' . '/' . $myBucket . '/' . $myKey;
 		return $url;
 	}
 
