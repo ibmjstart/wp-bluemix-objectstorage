@@ -436,7 +436,7 @@ class Swift extends Swift_Plugin_Base {
 
 	function swift_create_bucket( $bucket_name ) {
 		try {
-				$this->swift_get_client()->createContainer(['name' => $bucket_name]);
+				$this->swift_get_client()->createContainer(['name' => $bucket_name, 'readAccess' => '.r:*']);
 		}
 		catch ( Exception $e ) {
 			return new WP_Error( 'exception', $e->getMessage() );
