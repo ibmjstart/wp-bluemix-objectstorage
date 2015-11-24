@@ -9,18 +9,11 @@
         "object",
         "storage"
     ],
-    "repositories": [
-       {
-          "type": "vcs",
-          "url": "https://github.com/php-opencloud/openstack.git"
-        }
-    ],
 
     "homepage": "https://github.com/ibmjstart/",
     "license": "GPLv3",
     "require": {
-                "php-opencloud/openstack": "dev-master#9715be70f0603358b2230a9103c20c526e82a9a8"
-        },
-    "minimum-stability": "dev"
+                "php-opencloud/openstack": "dev-master"
+        }
 }
 
