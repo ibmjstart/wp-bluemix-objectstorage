@@ -409,8 +409,12 @@ class Swift extends Swift_Plugin_Base {
 		$password = $creds['password'];
 		$projectId = $creds['projectId'];
 		
-		
-		$url = 'https://dal.objectstorage.open.softlayer.com/v1/AUTH_' . $projectId . '/' . $myBucket . '/' . $myKey;
+		$objectUrl = $openstack->objectStoreV1()
+                    ->getContainer($myBucket)
+                    ->getObject($myKey);
+                    ->getPublicUri();
+		$url = $objectUrl->toString();
+		//$url = 'https://dal.objectstorage.open.softlayer.com/v1/AUTH_' . $projectId . '/' . $myBucket . '/' . $myKey;
 		return $url;
 	}
 
