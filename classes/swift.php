@@ -1,6 +1,7 @@
 <?php
 require_once ABSPATH.'vendor/autoload.php';
 require_once 'swift-plugin-base.php';
+use OpenStack\Identity\v3\Service;
 
 class Swift extends Swift_Plugin_Base {
 	private $swiftClient, $storageUrl, $uploadHash;
@@ -401,7 +402,33 @@ class Swift extends Swift_Plugin_Base {
 	}
 	
 	function getObjectUrl($myBucket, $myKey) {
-		$url = 'https://dal.objectstorage.open.softlayer.com/v1/AUTH_b5983bc6cb054ded99e4cef57318c05f' . '/' . $myBucket . '/' . $myKey;
+		$swift = $this->swift_get_vcap_variable('Object-Storage');
+		$creds = $swift['credentials'];
+		$auth_url = $creds['auth_url'] . '/v3'; //keystone v3
+		$region = $creds['region'];
+		$userId = $creds['userId'];
+		$password = $creds['password'];
+		$projectId = $creds['projectId'];
+		
+		/* 
+		$client = ClientInterface::class; // Guzzle\ClientInterface
+		$service = new Service($client->reveal(), new Api());
+		$userOptions = [
+	            'user' => [
+	                'id'       => $userId,
+	                'password' => $password,
+	            ],
+	            'scope' => [
+	                'project' => ['id' => $projectId]
+	            ],
+	            'catalogName' => 'swift',
+	            'catalogType' => 'object-store',
+	            'region' => $region,
+	        ];
+		list ($token, $url) = $this->service->authenticate($userOptions);
+		*/
+		
+		$url = 'https://dal.objectstorage.open.softlayer.com/v1/AUTH_' . $projectId . '/' . $myBucket . '/' . $myKey;
 		return $url;
 	}
 
