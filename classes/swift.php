@@ -409,7 +409,7 @@ class Swift extends Swift_Plugin_Base {
 		$password = $creds['password'];
 		$projectId = $creds['projectId'];
 		
-		$objectUrl = swift_get_client()
+		$objectUrl = $this->swift_get_client()
                     ->getContainer($myBucket)
                     ->getObject($myKey)
                     ->getPublicUri();
