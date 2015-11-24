@@ -413,7 +413,7 @@ class Swift extends Swift_Plugin_Base {
                     ->getContainer($myBucket)
                     ->getObject($myKey)
                     ->getPublicUri();
-		$url = $objectUrl->toString();
+		$url = $objectUrl;
 		//$url = 'https://dal.objectstorage.open.softlayer.com/v1/AUTH_' . $projectId . '/' . $myBucket . '/' . $myKey;
 		return $url;
 	}
