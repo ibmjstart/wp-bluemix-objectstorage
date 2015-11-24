@@ -20,6 +20,7 @@
     "license": "GPLv3",
     "require": {
                 "php-opencloud/openstack": "dev-master"
-        }
+        },
+    "minimum-stability": "dev"
 }
 
