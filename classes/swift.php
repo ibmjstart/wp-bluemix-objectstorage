@@ -1,7 +1,6 @@
 <?php
 require_once ABSPATH.'vendor/autoload.php';
 require_once 'swift-plugin-base.php';
-use OpenStack\Identity\v3\Service;
 
 class Swift extends Swift_Plugin_Base {
 	private $swiftClient, $storageUrl, $uploadHash;
@@ -410,23 +409,6 @@ class Swift extends Swift_Plugin_Base {
 		$password = $creds['password'];
 		$projectId = $creds['projectId'];
 		
-		/* 
-		$client = ClientInterface::class; // Guzzle\ClientInterface
-		$service = new Service($client->reveal(), new Api());
-		$userOptions = [
-	            'user' => [
-	                'id'       => $userId,
-	                'password' => $password,
-	            ],
-	            'scope' => [
-	                'project' => ['id' => $projectId]
-	            ],
-	            'catalogName' => 'swift',
-	            'catalogType' => 'object-store',
-	            'region' => $region,
-	        ];
-		list ($token, $url) = $this->service->authenticate($userOptions);
-		*/
 		
 		$url = 'https://dal.objectstorage.open.softlayer.com/v1/AUTH_' . $projectId . '/' . $myBucket . '/' . $myKey;
 		return $url;
