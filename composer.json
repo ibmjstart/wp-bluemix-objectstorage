@@ -12,7 +12,7 @@
     "repositories": [
        {
           "type": "vcs",
-          "url": "git@github.com:php-opencloud/openstack.git"
+          "url": "https://github.com/php-opencloud/openstack.git"
         }
     ],
 
