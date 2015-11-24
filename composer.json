@@ -19,7 +19,7 @@
     "homepage": "https://github.com/ibmjstart/",
     "license": "GPLv3",
     "require": {
-                "php-opencloud/openstack": "dev-master"
+                "php-opencloud/openstack": "dev-master#9715be70f0603358b2230a9103c20c526e82a9a8"
         },
     "minimum-stability": "dev"
 }
