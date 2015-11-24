@@ -13,7 +13,7 @@
     "homepage": "https://github.com/ibmjstart/",
     "license": "GPLv3",
     "require": {
-                "alewitt/openstack": "dev-patch-1"
+                "alewitt/openstack": "dev-master"
         }
 }
 
