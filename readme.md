@@ -37,7 +37,7 @@ result in losing all of the files you currently have saved that aren't uploaded 
 ## Changelog ##
 
 #### 0.4 - 2015-11-30 ####
-* changed how wordpress authenticates with ibm object storage. IBM object transitioned from v1 to v3, and at that time changed how they authenticate to match how the open source standard authenticates.
+* changed how wordpress authenticates with ibm object storage. IBM object storage transitioned from v1 to v3, and at that time changed how they authenticate to match how the open source standard authenticates. This update follows that change.
 
 #### 0.3 - 2015-2-11 ####
 * added wordpress dependency to ensure wordpress installed before objectstorage
