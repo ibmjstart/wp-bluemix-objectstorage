@@ -39,10 +39,10 @@ result in losing all of the files you currently have saved that aren't uploaded 
 #### 0.4 - 2015-11-30 ####
 * changed how wordpress authenticates with ibm object storage. IBM object transitioned from v1 to v3, and at that time changed how they authenticate to match how the open source standard authenticates.
 
-#### 0.3 - 2015-2-11 #### 
+#### 0.3 - 2015-2-11 ####
 * added wordpress dependency to ensure wordpress installed before objectstorage
 
-#### 0.2 - 2014-11-04 #### 
+#### 0.2 - 2014-11-04 ####
 * Added a default container to upload images to. Object Storage will now automatically upload media files to "WordPress" until changed to a new container.
 * Renamed plugin and folder structure
 * Removed unnecessary zendservice library files from the plugin itself - install them from Composer. Soon, the modified openstack library will also be removed and installed via a package manager.
