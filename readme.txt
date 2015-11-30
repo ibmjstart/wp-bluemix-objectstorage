@@ -2,11 +2,11 @@
 This plugin has been forked from the Amazon S3 plugin (http://wordpress.org/extend/plugins/amazon-s3-and-cloudfront/) and modified to use IBM Object Storage instead of S3.
 
 === Media Storage on IBM Object Storage ===
-Contributors: aahamilt
+Contributors: aahamilt, miguel, alewit
 Tags: uploads, Openstack, swift, mirror, admin, media, remote, storage
 Requires at least: 3.5
-Tested up to: 4.0
-Stable tag: 0.2
+Tested up to: 4.3.1
+Stable tag: 0.3
 License: GPLv3
 
 Copies files to IBM Object Storage on Bluemix as they are uploaded to the Media Library.
@@ -17,7 +17,7 @@ This plugin automatically copies images, videos, documents, and any other media 
 
 Uploading files *directly* to your Swift account is not currently supported by this plugin. They are uploaded to your application first, then copied to Swift. However, once they have been uploaded to Swift, they will be removed from the application. Files are served over https.
 
-* This plugin has been written for the Openstack Swift API using Zendframework's [Swift library](https://github.com/zendframework/ZendService_OpenStack), but was originally a fork of
+* This plugin has been written for the Openstack Swift API using[php-opencloud/openstack](https://github.com/php-opencloud/openstack), but was originally a fork of
 the [Amazon S3 and Cloudfront](https://wordpress.org/plugins/amazon-s3-and-cloudfront/) plugin written by Brad Touesnard. It is designed to work with Bluemix, and will not work outside of the Bluemix
 environment without effort by the developer as it depends on services provided by Bluemix.
 == Installation ==
@@ -35,6 +35,9 @@ result in losing all of the files you currently have saved that aren't uploaded 
 == Screenshots ==
 
 == Changelog ==
+
+= 0.4 - 2015-11-30 =
+* changed how wordpress authenticates with ibm object storage. IBM object transitioned from v1 to v3, and at that time changed how they authenticate to match how the open source standard authenticates.
 
 = 0.3 - 2015-2-11 =
 * added wordpress dependency to ensure wordpress installed before objectstorage
