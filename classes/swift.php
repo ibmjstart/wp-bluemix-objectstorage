@@ -415,9 +415,9 @@ class Swift extends Swift_Plugin_Base {
                     ->getObject($myKey)
                     ->getPublicUri();
 		$url = (string)$objectUrl;
-		ChromePhp::log($url);
+		//ChromePhp::log($url);
 		
-		$url = 'https://dal.objectstorage.open.softlayer.com/v1/AUTH_' . $projectId . '/' . $myBucket . '/' . $myKey;
+		//$url = 'https://dal.objectstorage.open.softlayer.com/v1/AUTH_' . $projectId . '/' . $myBucket . '/' . $myKey;
 		return $url;
 	}
 
