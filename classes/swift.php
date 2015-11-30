@@ -1,6 +1,7 @@
 <?php
 require_once ABSPATH.'vendor/autoload.php';
 require_once 'swift-plugin-base.php';
+include 'ChromePhp.php';
 
 class Swift extends Swift_Plugin_Base {
 	private $swiftClient, $storageUrl, $uploadHash;
@@ -59,73 +60,79 @@ class Swift extends Swift_Plugin_Base {
 		}
 
 		function swift_delete_attachment( $post_id ) {
-				if ( !$this->swift_plugin_setup() ) {
-						return;
-				}
+			if ( !$this->swift_plugin_setup() ) {
+					return;
+			}
 
-				$backup_sizes = get_post_meta( $post_id, '_wp_attachment_backup_sizes', true );
+			$backup_sizes = get_post_meta( $post_id, '_wp_attachment_backup_sizes', true );
 
-				$intermediate_sizes = array();
-				foreach ( get_intermediate_image_sizes() as $size ) {
-						if ( $intermediate = image_get_intermediate_size( $post_id, $size ) )
-								$intermediate_sizes[] = $intermediate;
-				}
+			$intermediate_sizes = array();
+			foreach ( get_intermediate_image_sizes() as $size ) {
+					if ( $intermediate = image_get_intermediate_size( $post_id, $size ) )
+							$intermediate_sizes[] = $intermediate;
+			}
 
-				if ( !( $swiftObject = $this->swift_get_attachment_info( $post_id ) ) ) {
-						return;
-				}
+			if ( !( $swiftObject = $this->swift_get_attachment_info( $post_id ) ) ) {
+					return;
+			}
 
-				$swift_path = dirname( $swiftObject['key'] );
-				$objects = array();
+			$swift_path = dirname( $swiftObject['key'] );
+			$objects = array();
 
-				// remove intermediate and backup images if there are any
-				foreach ( $intermediate_sizes as $intermediate ) {
+			// remove intermediate and backup images if there are any
+			foreach ( $intermediate_sizes as $intermediate ) {
+					$objects[] = array(
+						'Key' => path_join( $swift_path, $intermediate['file'] )
+					);
+			}
+
+			if ( is_array( $backup_sizes ) ) {
+					foreach ( $backup_sizes as $size ) {
 						$objects[] = array(
-							'Key' => path_join( $swift_path, $intermediate['file'] )
-						);
-				}
-
-				if ( is_array( $backup_sizes ) ) {
-						foreach ( $backup_sizes as $size ) {
-							$objects[] = array(
-								'Key' => $swift_path
-							);
-						}
-				}
-
-				// Try removing any @2x images but ignore any errors
-				if ( $objects ) {
-					$hidpi_images = array();
-					foreach ( $objects as $object ) {
-						$hidpi_images[] = array(
-							'Key' => $this->swift_get_hidpi_file_path( $object['Key'] )
+							'Key' => $swift_path
 						);
 					}
+			}
+
+			// Try removing any @2x images but ignore any errors
+			if ( $objects ) {
+				$hidpi_images = array();
+				foreach ( $objects as $object ) {
+					$hidpi_images[] = array(
+						'Key' => $this->swift_get_hidpi_file_path( $object['Key'] )
+					);
+				}
+
+				try {
+					foreach($hidpi_images as $image) {
+						$this->swift_get_client()
+						     ->getContainer($swiftObject['bucket'])
+					             ->getObject($image['Key'])
+					             ->delete();
+					}
+				}
+				catch ( Exception $e ) {}
+			}
+
+			$objects[] = array(
+				'Key' => $swiftObject['key']
+			);
 
 			try {
-						foreach($hidpi_images as $image) {
-								$this->swift_get_client()->deleteObject($swiftObject['bucket'], $image['Key']);
-						}
-			}
-			catch ( Exception $e ) {}
+				foreach ($objects as $object){
+					$this->swift_get_client()
+					     ->getContainer($swiftObject['bucket'])
+				             ->getObject($object['Key'])
+				             ->delete();
 				}
-
-				$objects[] = array(
-					'Key' => $swiftObject['key']
-				);
-
-		try {
-					foreach ($objects as $object){
-						$this->swift_get_client()->deleteObject($swiftObject['bucket'], $object['Key'] );
-					}
-		}
-		catch ( Exception $e ) {
-			error_log( 'Error removing files from Swift: ' . $e->getMessage() );
-			return;
-		}
-
-				delete_post_meta( $post_id, 'swift_info' );
-		}
+			}
+			catch ( Exception $e ) {
+				error_log( 'Error removing files from Swift: ' . $e->getMessage() );
+				return;
+			}
+	
+					delete_post_meta( $post_id, 'swift_info' );
+			}
 
 		/*
 		* 	When WordPress uploads a file on the local filesystem with the same name as something that has already been uploaded,
@@ -185,7 +192,12 @@ class Swift extends Swift_Plugin_Base {
 						try {
 								$uploaded = file_get_contents($args['SourceFile'] );
 								$newKey = $args['Key'];
-								$this->swift_get_client()->setObject($args['Bucket'], $newKey, $uploaded);
+								$this->swift_get_client()
+								     ->getContainer($args['Bucket'])
+								     ->createObject([
+								     		'name'    => $newKey,
+    										'content' => $uploaded
+								     		]);
 						}
 						catch ( Exception $e ) {
 								error_log( 'Error uploading ' . $file_path . ' to Swift: ' . $e->getMessage() );
@@ -246,7 +258,12 @@ class Swift extends Swift_Plugin_Base {
 
 				$uploaded = file_get_contents($args['SourceFile'] );
 				$newKey = $args['Key'];
-		  	$this->swift_get_client()->setObject($args['Bucket'], $newKey, $uploaded );
+		  		$this->swift_get_client()
+				     ->getContainer($args['Bucket'])
+				     ->createObject([
+				     		'name'    => $newKey,
+    						'content' => $uploaded
+				     		]);
 
 			}
 			catch ( Exception $e ) {
@@ -368,12 +385,12 @@ class Swift extends Swift_Plugin_Base {
 		// Hash cannot be added at the end of the url due to file extension, so put it at the
 		// beginning of the object name.
 
-		$url = $this->swift_get_client()->getStorageUrl() . '/' . $domain_bucket . '/' . $swiftObject['key'];
+		$url = $this->getObjectUrl($swiftObject['bucket'], $swiftObject['key']);
 
 		if ( !is_null( $expires ) ) {
 			try {
 				$expires = time() + $expires;
-					$secure_url = $this->swift_get_client()->getObjectUrl($swiftObject['bucket'], $swiftObject['key'] );
+					$secure_url = $this->getObjectUrl($swiftObject['bucket'], $swiftObject['key'] );
 					$url .= substr( $secure_url, strpos( $secure_url, '?' ) );
 			}
 			catch ( Exception $e ) {
@@ -382,6 +399,26 @@ class Swift extends Swift_Plugin_Base {
 		}
 
 		return apply_filters( 'swift_get_attachment_url', $url, $swiftObject, $post_id, $expires );
+	}
+	
+	function getObjectUrl($myBucket, $myKey) {
+		$swift = $this->swift_get_vcap_variable('Object-Storage');
+		$creds = $swift['credentials'];
+		$auth_url = $creds['auth_url'] . '/v3'; //keystone v3
+		$region = $creds['region'];
+		$userId = $creds['userId'];
+		$password = $creds['password'];
+		$projectId = $creds['projectId'];
+		
+		$objectUrl = $this->swift_get_client()
+                    ->getContainer($myBucket)
+                    ->getObject($myKey)
+                    ->getPublicUri();
+		$url = (string)$objectUrl;
+		//ChromePhp::log($url);
+		
+		//$url = 'https://dal.objectstorage.open.softlayer.com/v1/AUTH_' . $projectId . '/' . $myBucket . '/' . $myKey;
+		return $url;
 	}
 
 	function swift_verify_ajax_request() {
@@ -415,7 +452,7 @@ class Swift extends Swift_Plugin_Base {
 
 	function swift_create_bucket( $bucket_name ) {
 		try {
-				$this->swift_get_client()->createContainer($bucket_name);
+				$this->swift_get_client()->createContainer(['name' => $bucket_name, 'readAccess' => '.r:*']);
 		}
 		catch ( Exception $e ) {
 			return new WP_Error( 'exception', $e->getMessage() );
@@ -431,26 +468,31 @@ class Swift extends Swift_Plugin_Base {
 
 	function swift_get_client() {
 
-		$swift = $this->swift_get_vcap_variable('objectstorage');
+		$swift = $this->swift_get_vcap_variable('Object-Storage');
 		$creds = $swift['credentials'];
-		$auth_uri = $creds['auth_uri'] . '/WordPress';	//Create an object storage subaccount for WordPress.
-		$user = $creds['username'];
+		$auth_url = $creds['auth_url'] . '/v3'; //keystone v3
+		$region = $creds['region'];
+		$userId = $creds['userId'];
 		$password = $creds['password'];
+		$projectId = $creds['projectId'];
 
 		if(is_null($this->swiftClient)){
-
-			$options = array (
-						'url'      => $auth_uri,
-						'user'     => $user,
-						'key'      => $password
-				);
-
-			$http = new Zend\Http\Client(null, array(
-																				'adapter' => 'Zend\Http\Client\Adapter\Socket',
-																				'sslverifypeer' => false));
-			$this->swiftClient = new ZendService\OpenStack\ObjectStorage($options, $http);
+			$this->swiftClient = new OpenStack\OpenStack([
+						    'authUrl' => $auth_url,
+						    'region'  => $region,
+						    'user'    => [
+						        'id'       => $userId,
+						        'password' => $password
+						    ],
+						    'scope'   => [
+						    	'project' => [
+						    		'id' => $projectId
+						    	]
+						    ]
+						]);
 		}
-		return $this->swiftClient;
+		
+		return $this->swiftClient->objectStoreV1();
 	}
 
 	function swift_get_containers() {
