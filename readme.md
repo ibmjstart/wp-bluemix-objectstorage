@@ -2,18 +2,12 @@
 This plugin has been forked from the Amazon S3 plugin (http://wordpress.org/extend/plugins/amazon-s3-and-cloudfront/) and modified to use IBM Object Storage instead of S3.
 
 ### Media Storage on IBM Object Storage ###
-Contributors: aahamilt, miguel, alewitt
-
-Tags: uploads, Openstack, swift, mirror, admin, media, remote, storage
-
-Requires at least: 3.5
-
-Tested up to: 4.3.1
-
-Stable tag: 0.3
-
-License: GPLv3
-
+Contributors: aahamilt, miguel, alewitt  
+Tags: uploads, Openstack, swift, mirror, admin, media, remote, storage  
+Requires at least: 3.5  
+Tested up to: 4.3.1  
+Stable tag: 0.3  
+License: GPLv3  
 Copies files to IBM Object Storage on Bluemix as they are uploaded to the Media Library.
 
 ## Description ##
