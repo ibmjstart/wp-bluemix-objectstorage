@@ -1,7 +1,6 @@
 <?php
 require_once ABSPATH.'vendor/autoload.php';
 require_once 'swift-plugin-base.php';
-include 'ChromePhp.php';
 
 class Swift extends Swift_Plugin_Base {
 	private $swiftClient, $storageUrl, $uploadHash;
@@ -415,7 +414,6 @@ class Swift extends Swift_Plugin_Base {
                     ->getObject($myKey)
                     ->getPublicUri();
 		$url = (string)$objectUrl;
-		//ChromePhp::log($url);
 		
 		//$url = 'https://dal.objectstorage.open.softlayer.com/v1/AUTH_' . $projectId . '/' . $myBucket . '/' . $myKey;
 		return $url;
