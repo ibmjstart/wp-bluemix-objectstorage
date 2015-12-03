@@ -605,5 +605,22 @@ class Swift extends Swift_Plugin_Base {
 		}
 		return $sources;
 	}
+	
+	/**
+	 * Helper function to find size name from width
+	 *
+	 * @param array  $sizes
+	 * @param string $width
+	 *
+	 * @return null|string
+	 */
+	protected function find_image_size_from_width( $sizes, $width ) {
+		foreach ( $sizes as $name => $size ) {
+			if ( $width === $size['width'] ) {
+				return $name;
+			}
+		}
+		return null;
+	}
 
 }
