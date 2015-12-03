@@ -21,6 +21,7 @@ class Swift extends Swift_Plugin_Base {
 		add_filter( 'wp_get_attachment_url', array( $this, 'wp_get_attachment_url' ), 9, 2 );
 		add_filter( 'wp_update_attachment_metadata', array( $this, 'wp_update_attachment_metadata' ), 100, 2 );
 		add_filter( 'delete_attachment', array( $this, 'swift_delete_attachment' ), 20 );
+		add_filter( 'wp_calculate_image_srcset', array( $this, 'wp_calculate_image_srcset' ), 10, 5 );
 	}
 		private function swift_get_hash(){
 			return substr(md5(uniqid(mt_rand(), true)), 0, 4);
@@ -580,6 +581,29 @@ class Swift extends Swift_Plugin_Base {
 		} else {
 			return $upload_path;
 		}
+	}
+	
+	/**
+	 * Replace local URLs with object storage ones for srcset image sources
+	 *
+	 * @param array  $sources
+	 * @param array  $size_array
+	 * @param string $image_src
+	 * @param array  $image_meta
+	 * @param int    $attachment_id
+	 *
+	 * @return array
+	 */
+	public function wp_calculate_image_srcset( $sources, $size_array, $image_src, $image_meta, $attachment_id ) {
+		foreach ( $sources as $width => $source ) {
+			$size   = $this->find_image_size_from_width( $image_meta['sizes'], $width );
+			$OS_url = $this->swift_get_attachment_url( $attachment_id, null, $size );
+			if ( false === $OS_url || is_wp_error( $OS_url ) ) {
+				continue;
+			}
+			$sources[ $width ]['url'] = $OS_url;
+		}
+		return $sources;
 	}
 
 }
