@@ -2,7 +2,7 @@
 This plugin has been forked from the Amazon S3 plugin (http://wordpress.org/extend/plugins/amazon-s3-and-cloudfront/) and modified to use IBM Object Storage instead of S3.
 
 ### Media Storage on IBM Object Storage ###
-Contributors: aahamilt, miguel, alewitt  
+Contributors: aahamilt, clement360, alewitt  
 Tags: uploads, Openstack, swift, mirror, admin, media, remote, storage  
 Requires at least: 3.5  
 Tested up to: 4.3.1  
