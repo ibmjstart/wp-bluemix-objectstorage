@@ -5,7 +5,7 @@ This plugin has been forked from the Amazon S3 plugin (http://wordpress.org/exte
 Contributors: aahamilt, clement360, alewitt  
 Tags: uploads, Openstack, swift, mirror, admin, media, remote, storage  
 Requires at least: 3.5  
-Tested up to: 4.4
+Tested up to: 4.4  
 License: GPLv3  
 Copies files to IBM Object Storage on Bluemix as they are uploaded to the Media Library.
 
